@@ -42,6 +42,14 @@ class ComboBot(commands.Cog):
             session.commit()
 
 
+    @tasks.loop(minutes=(60*12))
+    async def db_backup(self):
+        time.sleep(5)
+        try:
+            channel = self.bot.get_channel(db_backup_channel)
+            await channel.send(file=discord.File("database.db"))
+        except Exception as e:
+            ic("Error uploading backup:", e)
 
 async def setup(bot):
     """
